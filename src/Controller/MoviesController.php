@@ -144,14 +144,15 @@ class MoviesController extends AbstractController
 
         $search = strtolower($nom);
         $array_movies = [];
-        foreach ($this->obj_json as $movie) {
-            if(preg_match('#^[a-zA-Z0-9]*$#', $search) && preg_match("/{$search}/i", strtolower($movie->nom))){
-                $array_movies[] = $movie;
-            }else{
-                return $this->redirectToRoute('movies');
+        if(preg_match('#^[a-zA-Z0-9]*$#', $search)){
+            foreach ($this->obj_json as $movie) {
+                if(preg_match("/{$search}/i", strtolower($movie->nom))){
+                    $array_movies[] = $movie;
+                }
             }
+        }else{
+            return $this->redirectToRoute('movies');
         }
-
         return $this->render('movies/movies_nom.html.twig', [
             'controller_name' => 'MoviesController',
             'movies' => $array_movies
@@ -167,23 +168,24 @@ class MoviesController extends AbstractController
 
         $search = strtolower($realisateur);
         $array_movies = [];
-        foreach ($this->obj_json as $movie) {
-            if(preg_match('#^[a-zA-Z0-9]*$#', $search) && preg_match("/{$search}/i", strtolower($movie->realisateur))){
-                $array_movies[] = $movie;
-            }else{
-                return $this->redirectToRoute('movies');
+        if (preg_match('#^[a-zA-Z0-9]*$#', $search)) {
+            foreach ($this->obj_json as $movie) {
+                if (preg_match('#^[a-zA-Z0-9]*$#', $search) && preg_match("/{$search}/i", strtolower($movie->realisateur))) {
+                    $array_movies[] = $movie;
+                }
             }
+        } else {
+            return $this->redirectToRoute('movies');
         }
-
         return $this->render('movies/movies_realisateur.html.twig', [
             'controller_name' => 'MoviesController',
             'movies' => $array_movies
         ]);
     }
 
-    //Route permettant de filtrer sur le réalisateur d'un film
+    //Route permettant de filtrer sur la nationalité d'un film
     /**
-     * @Route("/movies_nationalite/{nationalite}", name="movies_nationalite", methods={"GET", "POST"})
+     * @Route("/movies_nationalite/{nationalite}", name="movies_nationalite")
      */
     public function movies_nationalite(string $nationalite): Response
     {
