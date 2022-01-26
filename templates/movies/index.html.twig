@@ -1,0 +1,178 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Movies{% endblock %}
+
+{% block body %}
+    <div class="row mt-4">
+        <p class="lead">Classement des films les plus diffusés sur les chaînes nationales gratuites entre 2010 et 2019.</p>
+        <div class="col">
+            <div class="col btn-group" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#ma-modal_diffusion">Top 5 des films les plus diffusés</button>
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#ma-modal_ratio">Top 5 des films avec le meilleur ratio “Nombre de diffusion en 1ère partie / Nombre de diffusion total”</button>
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#ma-modal_moyenne_diffusion">Top 5 des réalisateurs avec la meilleur moyenne de diffusion</button>
+            </div>
+            <div class="modal fade" id="ma-modal_diffusion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ma-modal-Label">Top 5 des films les plus diffusés</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        <div class="modal-body">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Film</th>
+                                        <th>Réalisateur</th>
+                                        <th>Nombre de diffusion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for movie in top_5_diffusion %}
+
+                                        <tr>
+                                            <td>{{ movie.nom }}</td>
+                                            <td>{{ movie.realisateur }}</td>
+                                            <td>{{ movie.nb_diffusion }}</td>
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="ma-modal_ratio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ma-modal-Label">Top 5 des films avec le meilleur ratio “Nombre de diffusion en 1ère partie / Nombre de diffusion total”</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        <div class="modal-body">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Film</th>
+                                        <th>Réalisateur</th>
+                                        <th>ratio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for movie in top_5_ratio %}
+
+                                        <tr>
+                                            <td>{{ movie.nom }}</td>
+                                            <td>{{ movie.realisateur }}</td>
+                                            <td>{{ movie.nb_premiere_partie / movie.nb_diffusion }}</td>
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="ma-modal_moyenne_diffusion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ma-modal-Label">Top 5 des réalisateurs avec la meilleur moyenne de diffusion</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        <div class="modal-body">
+                           <table class="table table-striped table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Film</th>
+                                        <th>Réalisateur</th>
+                                        <th>Moyenne annuelle de diffusion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for movie in top_5_moyenne_diffusion %}
+
+                                        <tr>
+                                            <td>{{ movie.nom }}</td>
+                                            <td>{{ movie.realisateur }}</td>
+                                            <td>{{ movie.moyenne_diffusion_par_an }}</td>
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nom du film
+
+                            {{ form_start(form_nom, {'attr': {'class':'d-flex'} } )}}
+                                {{ form_errors(form_nom)}}
+                                {{ form_widget(form_nom.nom, {'attr': {'class':'form-control me-2'} } ) }}
+                                <button class="btn btn-outline-success" type="submit">Rechercher</button>
+                            {{ form_end(form_nom)}}
+
+                        </th>
+                        <th>Réalisateur
+
+                            {{ form_start(form_realisateur, {'attr': {'class':'d-flex'} } )}}
+                                {{ form_errors(form_realisateur)}}
+                                {{ form_widget(form_realisateur.realisateur, {'attr': {'class':'form-control me-2'} } ) }}
+                                <button class="btn btn-outline-success" type="submit">Rechercher</button>
+                            {{ form_end(form_realisateur)}}
+
+                        </th>
+                        <th>Année de production</th>
+                        <th>Nationalité
+
+                            <select id="select_nationalite" class="form-select" aria-label="Default select example">
+                                <option selected>Nationalité</option>
+                                {% for nationalite in nationalites %}
+                                    <option value="{{ path('movies_nationalite', {'nationalite': nationalite}) }}">{{ nationalite }}</option>
+                                {% endfor %}
+                            </select>
+
+                        </th>
+                        <th>Dernière diffusion</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for movie in movies %}
+
+                        <tr>
+                            <td>{{ movie.nom }}</td>
+                            <td>{{ movie.realisateur }}</td>
+                            <td>{{ movie.annee_production }}</td>
+                            <td>{{ movie.nationalite }}</td>
+                            <td>{{ movie.derniere_diffusion }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
